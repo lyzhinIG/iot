@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>${Title}</title>
+  <!--- Tell the browser to be responsive to screen width --->
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <!--- Bootstrap 3.3.6 --->
+  <link rel="stylesheet" href="./tpl/bootstrap/css/bootstrap.css">
+  <!--- Font Awesome --->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+  <!--- Ionicons --->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+  <!--- Theme style --->
+  <link rel="stylesheet" href="./tpl/dist/css/AdminLTE.css">
+  <!--- AdminLTE Skins. Choose a skin from the css/skins
+       folder instead of downloading all of them to reduce the load. --->
+  <link rel="stylesheet" href="./tpl/dist/css/skins/_all-skins.min.css">
+  <!--- bootstrap wysihtml5 - text editor --->
+  <link rel="stylesheet" href="./tpl/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
+  <!--- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries --->
+  <!--- WARNING: Respond.js doesn't work if you view the page via file:// --->
+  <!---[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]--->
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+
+  <header class="main-header">
+    <!--- Logo --->
+    <a href="${Index_promo}" class="logo">
+      <!--- mini logo for sidebar mini 50x50 pixels --->
+      <span class="logo-mini"><b>I</b>EDU</span>
+      <!--- logo for regular state and mobile devices --->
+      <span class="logo-lg"><b>IoT</b>EDU</span>
+    </a>
+    <!--- Header Navbar: style can be found in header.less --->
+    <nav class="navbar navbar-static-top">
+      <!--- Sidebar toggle button --->
+      <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </a>
+    </nav>
+  </header>
+  <!--- Left side column. contains the logo and sidebar --->
+  <aside class="main-sidebar">
+    <!--- sidebar: style can be found in sidebar.less --->
+    <section class="sidebar">
+      <!--- Sidebar user panel --->
+      <div class="user-panel">
+
+        <div class="pull-left info">
+          <p></p>
+          
+        </div>
+      </div>
+
+      <!--- /.search form --->
+      <!--- sidebar menu: : style can be found in sidebar.less --->
+      <ul class="sidebar-menu">
+        <li class="header">Меню</li>
+        <li><a href="${LK}"><i class="fa  fa-plug"></i> <span>Мои устройства</span></a></li>
+        <li><a href="${Profile}"><i class="fa  fa-gear"></i> <span>Редактировать профиль</span></a></li>
+        <li><a href="${Add_device}"><i class="fa fa-cubes"></i> <span>Добавить устройство</span></a></li>
+       <li><a href="${Book}"><i class="fa fa-book"></i> <span>Учебник</span></a></li>
+     
+      </ul>
+    </section>
+    <!--- /.sidebar --->
+  </aside>
+
+  <!--- Content Wrapper. Contains page content --->
+  <div class="content-wrapper">
+    <!--- Content Header (Page header) --->
+    <section class="content-header">
+      <h1>
+            <small>Образовательная среда для работы с конструкторами интернет вещей</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="${Index_promo}"><i class="fa fa-dashboard"></i>Главная</a></li>
+        <li><a href="#" class="active">редактор</a></li>
+      </ol>
+    </section>
+
+    <!--- Main content --->
+    <section class="content">
+   
+      <!--- /.row --->
+      <div class="row">
+    
+             <div class="box">
+            <div class="box-header">
+              <h3 class="box-title">Редактор программы для устройства ${Device_name}
+              </h3>
+              <!--- tools box --->
+              <div class="pull-right box-tools">
+                <button type="button" class="btn btn-default btn-sm" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+                  <i class="fa fa-minus"></i></button>
+              </div>
+              <!--- /. tools --->
+            </div>
+            <!--- /.box-header --->
+            <div class="box-body pad">
+              <form action="" method="post">
+                <textarea name="code" class="textarea" style="width: 100%; height: 600px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;">
+#include &lt;Wire.h&gt;
+#include &lt;LM75.h&gt;
+#include &lt;Arduino.h&gt;
+#include &lt;ESP8266WiFi.h&gt;
+#include &lt;ESP8266WiFiMulti.h&gt;
+#include &lt;ESP8266HTTPClient.h&gt;
+#define USE_SERIAL Serial
+LM75 sensor; 
+ESP8266WiFiMulti WiFiMulti;
+
+void setup() {
+    Wire.begin();
+    USE_SERIAL.begin(19200);
+    pinMode(D8, INPUT); 
+    sensor.tos(70);
+    sensor.thyst(60);
+    for(uint8_t t = 4; t > 0; t--) {
+        USE_SERIAL.printf(" [SETUP] WAIT %d...\n", t);
+        USE_SERIAL.flush();
+        delay(1000);
+    }
+    WiFiMulti.addAP("имя_сети", "пароль");
+}
+void loop() {
+    char site[] = "http://iot.eduwork.cf/dt.php?";
+    char id[] = "${user_id}";
+    char key[] = "${user_key}";
+    char device[] = "${Device_name}" ;
+    int tmp = sensor.temp();
+    int kik = digitalRead(D8);
+    if((WiFiMulti.run() == WL_CONNECTED)) {
+        String url = String(site)+String("id=")+String(id)+String("&key=")+String(key)+String("&d=")+String(device)+String("&tmp=")+String(tmp)+String("&kik=")+String(kik);
+        HTTPClient http;
+        int httpCode = http.GET();
+        if(httpCode > 0) {
+            if(httpCode == HTTP_CODE_OK) {
+                String payload = http.getString();
+            }
+        } 
+        http.end();
+    }
+    delay(10000);
+}             
+                </textarea>
+                  <input type="hidden" name="Device_name" value="">
+
+                 </form>
+            </div>   
+          </div>
+      </div>
+    </section>
+    <!--- /.content --->
+  </div>
+  <!--- /.content-wrapper --->
+  <footer class="main-footer">
+<strong>Дизайн от <a href="http://almsaeedstudio.com">Almsaeed Studio</a>.</strong> All rights reserved.
+  </footer>
+
+<!--- jQuery 2.2.0 --->
+<script src="./tpl/plugins/jQuery/jQuery-2.2.0.min.js"></script>
+<!--- Bootstrap 3.3.6 --->
+<script src="./tpl/bootstrap/js/bootstrap.min.js"></script>
+<!--- Slimscroll --->
+<script src="./tpl/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+<!--- FastClick --->
+<script src="./tpl/plugins/fastclick/fastclick.js"></script>
+<!--- AdminLTE App --->
+<script src="./tpl/dist/js/app.min.js"></script>
+<!--- AdminLTE for demo purposes --->
+<script src="./tpl/dist/js/demo.js"></script>
+    <!--- Bootstrap WYSIHTML5 --->
+<script src="./tpl/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
+<script>
+  $(function () {
+    // Replace the <textarea id="editor1"> with a CKEditor
+    // instance, using default configuration.
+    CKEDITOR.replace('editor1');
+    //bootstrap WYSIHTML5 - text editor
+    $(".textarea").wysihtml5();
+  });
+</script>
+</body>
+</html>
